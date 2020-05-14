@@ -31,7 +31,7 @@ jobs:
         && rm tmp.zip
 
     - name: Terraform Init
-      run: terraform init
+      run: terraform init -input=false
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.DEV_ACCESS_KEY }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_SECRET_KEY }}
@@ -41,14 +41,32 @@ jobs:
       run: terraform fmt -check
 
     - name: Terraform Plan
-      run: terraform plan
+      id: plan
+      run: terraform plan -input=false -no-color
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.DEV_ACCESS_KEY }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_SECRET_KEY }}
         AWS_DEFAULT_REGION: ${{ secrets.DEV_REGION }}
+        TF_VAR_access_key: ${{ secrets.DEV_ACCESS_KEY }}
+        TF_VAR_secret_key: ${{ secrets.DEV_SECRET_KEY }}
+        TF_VAR_region: ${{ secrets.DEV_REGION }}
         TF_VAR_cf_user: ${{ secrets.DEV_CF_USER }}
         TF_VAR_cf_password: ${{ secrets.DEV_CF_PASSWORD }}
         TF_VAR_uev_key: ${{ secrets.DEV_UEV_KEY }}
+
+    - uses: actions/github-script@0.9.0
+      if: github.event_name == 'pull_request'
+      env:
+        STDOUT: "```${{ steps.plan.outputs.stdout }}```"
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: process.env.STDOUT
+          })
 
     # - name: Terraform Apply
     #   if: github.ref == 'refs/heads/master' && github.event_name == 'push'
