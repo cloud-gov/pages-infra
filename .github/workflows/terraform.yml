@@ -22,7 +22,7 @@ jobs:
       uses: hashicorp/setup-terraform@v1
     
     - name: Install Cloud Foundry Terraform Provider
-    - run: |
+      run: |
         wget \
           -q -O tmp.zip \
           https://github.com/cloudfoundry-community/terraform-provider-cf/releases/download/v0.12.0/terraform-provider-cloudfoundry_linux_amd64.zip \
