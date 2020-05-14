@@ -1,3 +1,5 @@
+![Terraform](https://github.com/18F/federalist-infra/workflows/Terraform/badge.svg)
+
 # Federalist Infra
 Terraform configuration for the Federalist platform
 
