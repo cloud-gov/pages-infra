@@ -1,6 +1,6 @@
 module "backend" {
   source = "../modules/backend"
-  
+
   bucket = "federalist-commercial-terraform-state"
   table  = "federalist-terraform-locks"
 }
