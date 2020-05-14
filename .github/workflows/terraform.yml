@@ -26,7 +26,7 @@ jobs:
         wget \
           -q -O tmp.zip \
           https://github.com/cloudfoundry-community/terraform-provider-cf/releases/download/v0.12.0/terraform-provider-cloudfoundry_linux_amd64.zip \
-        # && mkdir -p $HOME/.terraform.d/plugins/linux_amd64 \
+        && mkdir -p $HOME/.terraform.d/plugins/linux_amd64 \
         && unzip tmp.zip terraform-provider-cloudfoundry -d $HOME/.terraform.d/plugins/linux_amd64 \
         && rm tmp.zip
 
