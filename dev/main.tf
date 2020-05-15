@@ -43,7 +43,7 @@ resource "cloudfoundry_user_provided_service" "uev_key" {
   name  = "federalist-${var.env}-uev-key"
   space = data.cloudfoundry_space.space.id
   credentials = {
-     key = var.uev_key
+    key = var.uev_key
   }
 }
 
