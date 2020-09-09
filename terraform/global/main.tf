@@ -83,7 +83,7 @@ data "aws_iam_policy_document" "ecr_write_policy" {
     resources = [
       "arn:aws-us-gov:ecr:::*",
     ]
-  }  
+  }
   statement {
     actions = [
       "ecr:CompleteLayerUpload",
