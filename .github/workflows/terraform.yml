@@ -3,7 +3,7 @@ name: 'Terraform'
 on:
   push:
     branches:
-      - main
+    - main
   pull_request:
 
 jobs:
@@ -19,9 +19,9 @@ jobs:
       AWS_ACCESS_KEY_ID:     ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_DEFAULT_REGION:    ${{ secrets.AWS_DEFAULT_REGION }}
-      TF_VAR_access_key:     ${{ secrets.DEV_ACCESS_KEY }}
-      TF_VAR_secret_key:     ${{ secrets.DEV_SECRET_KEY }}
-      TF_VAR_region:         ${{ secrets.DEV_REGION }}
+      TF_VAR_access_key:     ${{ secrets.AWS_ACCESS_KEY_ID }}
+      TF_VAR_secret_key:     ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      TF_VAR_region:         ${{ secrets.AWS_DEFAULT_REGION }}
       # TF_VAR_cf_user:        ${{ secrets.DEV_CF_USER }}
       # TF_VAR_cf_password:    ${{ secrets.DEV_CF_PASSWORD }}
       # TF_VAR_uev_key:        ${{ secrets.DEV_UEV_KEY }}
