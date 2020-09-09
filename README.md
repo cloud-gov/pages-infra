@@ -9,20 +9,13 @@ To contain the blast radius of any changes, cloud.gov spaces and deployment cred
 # Environment configuration
 
 ## Running locally
-All variables and secrets should be provided in a `secrets.auto.tfvars` file within each target environment. The required values are described in the variables file for each environment, ex: [dev variables)](/dev/variables.tf).
+All variables and secrets should be provided in a `secrets.auto.tfvars` file within each target environment. The required values are described in the variables file for each environment, ex: [global variables)](/terraform/global/variables.tf). Create a local aws profile named with appropriate credentials for the terraform user and preface every terraform command with `AWS_PROFILE=<profile>`.
 
 ## Running in CI
 All variables and secrets should be provided as environment variables on the platform. The name of the environment variable is the name of the Terraform variable prefixed with `TF_VAR_`. Ex. `TF_VAR_uev_key` will be used as the value for the variable `uev_key`.
 
 # Running
-- Change directory into the appropriate environment: `cd dev`
-- Create secrets if necessary in `./.secrets.auto.tfvars`
-- Initialize terraform if necessary: `terraform init -backend-config=./.secrets.auto.tfvars`
-- Run plan and confirm all changes: `terraform plan`
-- Apply the changes: `terraform apply`
-
-# Running locally
-TBD
+Remember to `init` if necessary and verify the plan before applying any changes.
 
 # Examples
 ## Creating a new environment
