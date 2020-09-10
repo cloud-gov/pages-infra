@@ -61,7 +61,7 @@ data "aws_iam_policy_document" "ecr_read_policy" {
       "ecr:GetAuthorizationToken",
     ]
     resources = [
-      "arn:aws-us-gov:ecr:::*",
+      "*",
     ]
   }
   statement {
@@ -81,7 +81,7 @@ data "aws_iam_policy_document" "ecr_write_policy" {
       "ecr:GetAuthorizationToken",
     ]
     resources = [
-      "arn:aws-us-gov:ecr:::*",
+      "*",
     ]
   }
   statement {
