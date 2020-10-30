@@ -126,3 +126,19 @@ resource "aws_iam_user_policy" "federalist_ecr_write" {
   user   = aws_iam_user.federalist_ecr_write.name
   policy = data.aws_iam_policy_document.ecr_write_policy.json
 }
+
+provider "aws" {
+  alias = "gov-east-1"
+  access_key = var.access_key
+  secret_key = var.secret_key
+  region = "us-gov-east-1"
+}
+
+resource "aws_ecr_repository" "federalist_ecr_recovery" {
+  provider = aws.gov-east-1
+  name = "federalist/garden-build"
+}
+
+output "federalist_ecr_recovery_url" {
+  value = aws_ecr_repository.federalist_ecr_recovery.repository_url
+}
