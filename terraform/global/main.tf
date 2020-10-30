@@ -70,8 +70,7 @@ data "aws_iam_policy_document" "ecr_read_policy" {
       "ecr:BatchGetImage",
     ]
     resources = [
-      aws_ecr_repository.federalist_ecr.arn,
-      aws_ecr_repository.federalist_ecr_recovery.arn
+      aws_ecr_repository.federalist_ecr.arn
     ]
   }
 }
@@ -95,8 +94,7 @@ data "aws_iam_policy_document" "ecr_write_policy" {
       "ecr:PutImage"
     ]
     resources = [
-      aws_ecr_repository.federalist_ecr.arn,
-      aws_ecr_repository.federalist_ecr_recovery.arn
+      aws_ecr_repository.federalist_ecr.arn
     ]
   }
 }
@@ -136,11 +134,6 @@ provider "aws" {
   region     = "us-gov-east-1"
 }
 
-resource "aws_ecr_repository" "federalist_ecr_recovery" {
-  provider = aws.gov-east-1
-  name     = "federalist/garden-build"
-}
-
-output "federalist_ecr_recovery_url" {
-  value = aws_ecr_repository.federalist_ecr_recovery.repository_url
+output "federalist_ecr_url" {
+  value = aws_ecr_repository.federalist_ecr.repository_url
 }
