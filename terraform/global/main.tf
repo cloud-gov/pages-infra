@@ -128,15 +128,15 @@ resource "aws_iam_user_policy" "federalist_ecr_write" {
 }
 
 provider "aws" {
-  alias = "gov-east-1"
+  alias      = "gov-east-1"
   access_key = var.access_key
   secret_key = var.secret_key
-  region = "us-gov-east-1"
+  region     = "us-gov-east-1"
 }
 
 resource "aws_ecr_repository" "federalist_ecr_recovery" {
   provider = aws.gov-east-1
-  name = "federalist/garden-build"
+  name     = "federalist/garden-build"
 }
 
 output "federalist_ecr_recovery_url" {
