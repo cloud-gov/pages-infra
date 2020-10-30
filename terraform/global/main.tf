@@ -70,7 +70,8 @@ data "aws_iam_policy_document" "ecr_read_policy" {
       "ecr:BatchGetImage",
     ]
     resources = [
-      aws_ecr_repository.federalist_ecr.arn
+      aws_ecr_repository.federalist_ecr.arn,
+      aws_ecr_repository.federalist_ecr_recovery.arn
     ]
   }
 }
@@ -94,7 +95,8 @@ data "aws_iam_policy_document" "ecr_write_policy" {
       "ecr:PutImage"
     ]
     resources = [
-      aws_ecr_repository.federalist_ecr.arn
+      aws_ecr_repository.federalist_ecr.arn,
+      aws_ecr_repository.federalist_ecr_recovery.arn
     ]
   }
 }
