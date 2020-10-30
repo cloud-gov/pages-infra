@@ -127,13 +127,6 @@ resource "aws_iam_user_policy" "federalist_ecr_write" {
   policy = data.aws_iam_policy_document.ecr_write_policy.json
 }
 
-provider "aws" {
-  alias      = "gov-east-1"
-  access_key = var.access_key
-  secret_key = var.secret_key
-  region     = "us-gov-east-1"
-}
-
 output "federalist_ecr_url" {
   value = aws_ecr_repository.federalist_ecr.repository_url
 }
