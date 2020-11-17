@@ -73,7 +73,7 @@ jobs:
         script: |
           const { PLAN } = process.env;
 
-          const displayOutcome = outcome => outcome === 'success' ? `✅`: `❌` ;
+          const displayOutcome = outcome => outcome === `success` ? `✅`: `❌` ;
 
           const output = `
             ## Terraforming *${{ matrix.name }}*
