@@ -5,8 +5,8 @@ function displayOutcome(outcome) {
 module.exports = (github, ctx) => {
   const { PLAN } = process.env;
     
+  // ## Terraforming *${ctx.matrix.name}*
   const output = `
-    ## Terraforming *${ctx.matrix.name}*
     #### Format: ${displayOutcome(ctx.steps.format.outcome)}
     #### Init:   ${displayOutcome(ctx.steps.init.outcome)}
     #### Plan:   ${displayOutcome(ctx.steps.plan.outcome)}
