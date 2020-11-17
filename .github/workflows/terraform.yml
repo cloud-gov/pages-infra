@@ -52,9 +52,11 @@ jobs:
         terraform_version: 0.13.2
 
     - name: Terraform Init
+      id: init
       run: terraform init -input=false
 
     - name: Terraform Format
+      id: format
       run: terraform fmt -check
 
     - name: Terraform Plan
@@ -69,18 +71,26 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
-          const output = `#### Terraform Format: \`${{ steps.fmt.outcome }}\`
-          #### Terraform Init: \`${{ steps.init.outcome }}\`
-          #### Terraform Plan: \`${{ steps.plan.outcome }}\`
-          <details><summary>Show Plan</summary>          
-          \`\`\`${process.env.PLAN}\`\`\`
-          </details>
+          const { PLAN } = process.env;
+          const { issue, matrix, repo, steps } = context;
+          
+          const displayOutcome = outcome => outcome === 'success' ? ✅ : ❌ ;
+          
+          const output = `
+            ## Terraforming *${matrix.name}*
+            #### Format: \`${displayOutcome(steps.format.outcome)}\`
+            #### Init: \`${displayOutcome(steps.init.outcome)}\`
+            #### Plan: \`${displayOutcome(steps.plan.outcome)}\`
+            <details>
+              <summary>Show Plan</summary>
+              ${PLAN}
+            </details>
           `;
 
           github.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
+            issue_number: issue.number,
+            owner: repo.owner,
+            repo: repo.repo,
             body: output
           })
 
