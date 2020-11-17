@@ -4,15 +4,12 @@ function displayOutcome(outcome) {
 
 module.exports = (github, ctx) => {
   const { PLAN } = process.env;
-  console.log({ github: Object.keys(github) })
-  console.log({ ctx: Object.keys(ctx) })
-  const { issue, matrix, repo, steps } = ctx;
     
   const output = `
-    ## Terraforming *${matrix.name}*
-    #### Format: ${displayOutcome(steps.format.outcome)}
-    #### Init:   ${displayOutcome(steps.init.outcome)}
-    #### Plan:   ${displayOutcome(steps.plan.outcome)}
+    ## Terraforming *${ctx.matrix.name}*
+    #### Format: ${displayOutcome(ctx.steps.format.outcome)}
+    #### Init:   ${displayOutcome(ctx.steps.init.outcome)}
+    #### Plan:   ${displayOutcome(ctx.steps.plan.outcome)}
     <details>
       <summary>
         Show Plan
@@ -22,9 +19,9 @@ module.exports = (github, ctx) => {
   `;
 
   github.issues.createComment({
-    issue_number: issue.number,
-    owner: repo.owner,
-    repo: repo.repo,
+    issue_number: ctx.issue.number,
+    owner: ctx.repo.owner,
+    repo: ctx.repo.repo,
     body: output
   });
 }
