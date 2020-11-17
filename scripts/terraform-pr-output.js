@@ -1,6 +1,5 @@
-
 function displayOutcome(outcome) {
-  return outcome === 'success' ? ✅ : ❌ ;
+  return outcome === 'success' ? `✅`: `❌` ;
 }
 
 module.exports = (github, ctx) => {
