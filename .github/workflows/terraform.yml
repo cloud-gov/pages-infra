@@ -75,9 +75,6 @@ jobs:
 
           const output = `
             ## Terraforming *${{ matrix.name }}*
-            #### Format: ${${{ steps.format.outcome }} === 'success' ? `✅`: `❌`}
-            #### Init:   ${${{ steps.init.outcome }} === 'success' ? `✅`: `❌`}
-            #### Plan:   ${${{ steps.plan.outcome }} === 'success' ? `✅`: `❌`}
             <details>
               <summary>
                 Show Plan
