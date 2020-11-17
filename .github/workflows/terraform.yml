@@ -71,7 +71,10 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
-          require(`${process.env.GITHUB_WORKSPACE}/scripts/terraform-pr-output.js`)(github, context)
+          const script = require(`${process.env.GITHUB_WORKSPACE}/scripts/terraform-pr-output.js`);
+          console.log({ context: Object.keys(context) })
+          console.log({ owner: context.repo.owner })
+          script(github, context)
 
     - name: Terraform Apply
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
