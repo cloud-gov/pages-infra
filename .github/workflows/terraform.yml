@@ -71,12 +71,28 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
-          const script = require(`${process.env.GITHUB_WORKSPACE}/scripts/terraform-pr-output.js`);
-          script({
-            github,
-            matrix: ${{ matrix }},
-            steps: ${{ steps }},
-            context
+          const { PLAN } = process.env;
+
+          const displayOutcome = outcome => outcome === 'success' ? `✅`: `❌` ;
+
+          const output = `
+            ## Terraforming *${{ matrix.name }}*
+            #### Format: ${displayOutcome(${{ steps.format.outcome }})}
+            #### Init:   ${displayOutcome(${{ steps.init.outcome }})}
+            #### Plan:   ${displayOutcome(${{ steps.plan.outcome }})}
+            <details>
+              <summary>
+                Show Plan
+              </summary>
+              ${PLAN}
+            </details>
+          `;
+
+          github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: output
           });
 
     - name: Terraform Apply
