@@ -2,14 +2,14 @@ function displayOutcome(outcome) {
   return outcome === 'success' ? `✅`: `❌` ;
 }
 
-module.exports = (github, ctx) => {
+module.exports = ({ github, matrix, steps, context }) => {
   const { PLAN } = process.env;
     
-  // ## Terraforming *${ctx.matrix.name}*
   const output = `
-    #### Format: ${displayOutcome(ctx.steps.format.outcome)}
-    #### Init:   ${displayOutcome(ctx.steps.init.outcome)}
-    #### Plan:   ${displayOutcome(ctx.steps.plan.outcome)}
+    ## Terraforming *${matrix.name}*
+    #### Format: ${displayOutcome(steps.format.outcome)}
+    #### Init:   ${displayOutcome(steps.init.outcome)}
+    #### Plan:   ${displayOutcome(steps.plan.outcome)}
     <details>
       <summary>
         Show Plan
@@ -19,9 +19,9 @@ module.exports = (github, ctx) => {
   `;
 
   github.issues.createComment({
-    issue_number: ctx.issue.number,
-    owner: ctx.repo.owner,
-    repo: ctx.repo.repo,
+    issue_number: context.issue.number,
+    owner: context.repo.owner,
+    repo: context.repo.repo,
     body: output
   });
 }
