@@ -71,28 +71,7 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
-          const { PLAN } = process.env;
-          const { issue, matrix, repo, steps } = context;
-          
-          const displayOutcome = outcome => outcome === 'success' ? ✅ : ❌ ;
-          
-          const output = `
-            ## Terraforming *${matrix.name}*
-            #### Format: \`${displayOutcome(steps.format.outcome)}\`
-            #### Init: \`${displayOutcome(steps.init.outcome)}\`
-            #### Plan: \`${displayOutcome(steps.plan.outcome)}\`
-            <details>
-              <summary>Show Plan</summary>
-              ${PLAN}
-            </details>
-          `;
-
-          github.issues.createComment({
-            issue_number: issue.number,
-            owner: repo.owner,
-            repo: repo.repo,
-            body: output
-          })
+          require(`${process.env.GITHUB_WORKSPACE}/scripts/terraform-pr-output.js`)(github, context)
 
     - name: Terraform Apply
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
