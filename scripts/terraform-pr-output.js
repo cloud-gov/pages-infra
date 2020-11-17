@@ -4,6 +4,7 @@ function displayOutcome(outcome) {
 
 module.exports = (github, ctx) => {
   const { PLAN } = process.env;
+  console.log({ ctx: Object.keys(ctx) })
   const { issue, matrix, repo, steps } = ctx;
     
   const output = `
