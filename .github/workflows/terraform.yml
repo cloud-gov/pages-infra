@@ -71,8 +71,6 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
-          const { PLAN } = process.env;
-
           const displayOutcome = outcome => outcome === 'success' ? '✅': '❌';
 
           const output = `
@@ -84,7 +82,8 @@ jobs:
               <summary>
                 Show Plan
               </summary>
-              ${PLAN}
+
+              ${process.env.PLAN}
             </details>
           `;
 
