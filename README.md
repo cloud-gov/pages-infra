@@ -1,44 +1,57 @@
 ![Terraform](https://github.com/18F/federalist-infra/workflows/Terraform/badge.svg)
 
 # Federalist Infra
-Terraform configuration for the Federalist platform
+Terraform configuration for the Federalist platform.
 
 # Requirements
 To contain the blast radius of any changes, cloud.gov spaces and deployment credentials must be created prior to running Terraform, the credentials for a given environment should only have permissions to the target environments.
 
-# Environment configuration
+# Repository organization
+This repository contains several [environments](#environments) each in their own folder as well as shared [modules](#modules) in the `modules` folder. Each environment is isolated from the others and corresponds to it's own [Terraform state](https://www.terraform.io/docs/state/index.html) file that lives in the configured [Terraform backend](https://www.terraform.io/docs/backends/index.html). All terraform commands should be run from within the directory of the desired environment.
 
-## Running locally
-All variables and secrets should be provided in a `secrets.auto.tfvars` file within each target environment. The required values are described in the variables file for each environment, ex: [global variables)](/terraform/global/variables.tf). Create a local aws profile named with appropriate credentials for the terraform user and preface every terraform command with `AWS_PROFILE=<profile>`. Make sure to work from the directory of the environment wo which you want to edit, ex `terraform/global`.
+# Getting started
+- clone the repository: `git clone git@github.com:18F/federalist-infra.git`
+- enter the repository directory: `cd federalist-infra`
+- for each desired environment:
+  - enter the environment directory: `cd terraform/<environment>`
+  - create environment-specific credentials: create a copy of the desired environment's `.secrets.auto.tfvars.example` file named `.secrets.auto.tfvars` and populate with appropriate values
+  - create an `aws-vault` profile with the appriopriate values for the [backend credentials](#backend-credentials)
+  - initialize terraform: `aws-vault exec <your profile> -- terraform init`
 
-## Running in CI
-All variables and secrets should be provided as environment variables on the platform. The name of the environment variable is the name of the Terraform variable prefixed with `TF_VAR_`. Ex. `TF_VAR_uev_key` will be used as the value for the variable `uev_key`.
+For each environment configured above, you should be able run `terraform plan` to see the potential effects of any changes.
 
-# Running
-Remember to `init` if necessary and verify the plan before applying any changes.
+# Configuration
+There are 2 sets of credentials needed to run Terraform commands for a desired environment: [backend credentials](#backend-credentials) and [environment-specific credentials](#environment-specific-credentials). The method by which these are provided may differ.
 
-# Examples
-## Creating a new environment
+## Backend credentials
+Every environment stores its [Terraform state](https://www.terraform.io/docs/state/index.html) file in a shared [Terraform S3 backend](https://www.terraform.io/docs/backends/types/s3.html). The credentials for the backend are always required and should be provided as environment variables without special prefixes. The required values are:
 
-### Create a cloud.gov space
-- Create a new space `cf create-space <space-name> -o gsa-18f-federalist`
-- Target the new space: `cf target -s <space-name>`
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+- `AWS_DEFAULT_REGION`
 
-### Create cloud.gov deployer credentials
-- Create a deployer account for Terraform to use: `cf create-service cloud-gov-service-account space-deployer terraform-user`
-- Create a service key for the deployer account: `cf create-service-key terraform-user terraform-user-key`
-- View the credentials for later configuration: `cf service-key terraform-user terraform-user-key`
+## Environment-specific credentials
+Each environment specifies the credentials it needs in the `variables.tf` file (Ex. [staging](https://github.com/18F/federalist-infra/blob/main/terraform/staging/variables.tf)). We provide these in different ways depending on the environment:
 
-### Create an encryption key for user environment variables
-This should be a cryptographically secure, random string. To generate one using `node`:
-```
-  node -e 'console.log(require("crypto").randomBytes(32).toString("hex"));'
-```
+- In CI (Github Actions), they are provided as environment variables by prefacing the variable name with `TF_VAR_` (Ex. [Github action](https://github.com/18F/federalist-infra/blob/main/.github/workflows/terraform.yml#L22))
+- Locally, they are provided by the `.secrets.auto.tfvars` file within each environment. This file should be created when initially getting started from the `.secrets.auto.tfvars.example` file in each environment.
 
-### Create the Terraform
-Create a new folder for the environment in this repo by using an existing one as a template, making sure to update the secrets to the values just generated.
+See [Terraform variables](https://www.terraform.io/docs/configuration/variables.html) for more details on Terraform variables.
 
-## Public domain
+# Environments
+## `global`
+Contains global configuration that may be leveraged by any environment. This currently includes:
+- the backend configuration
+- ECR
+
+## `staging`
+Contains configuration relevant to the Federalist staging environment.
+
+# Modules
+## `queue`
+Contains the configuration to create an AWS SQS instance and associated users/policies and a corresponding user-provided service in cloud.gov.
+
+# Public domain
 
 This project is in the worldwide [public domain](LICENSE.md). As stated in [CONTRIBUTING](CONTRIBUTING.md):
 
