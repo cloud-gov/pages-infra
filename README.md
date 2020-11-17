@@ -20,17 +20,18 @@ This repository contains several [environments](#environments) each in their own
 
 For each environment configured above, you should be able run `terraform plan` to see the potential effects of any changes.
 
-# Configuration
+# Details
+## Configuration
 There are 2 sets of credentials needed to run Terraform commands for a desired environment: [backend credentials](#backend-credentials) and [environment-specific credentials](#environment-specific-credentials). The method by which these are provided may differ.
 
-## Backend credentials
+### Backend credentials
 Every environment stores its [Terraform state](https://www.terraform.io/docs/state/index.html) file in a shared [Terraform S3 backend](https://www.terraform.io/docs/backends/types/s3.html). The credentials for the backend are always required and should be provided as environment variables without special prefixes. The required values are:
 
 - `AWS_ACCESS_KEY_ID`
 - `AWS_SECRET_ACCESS_KEY`
 - `AWS_DEFAULT_REGION`
 
-## Environment-specific credentials
+### Environment-specific credentials
 Each environment specifies the credentials it needs in the `variables.tf` file (Ex. [staging](https://github.com/18F/federalist-infra/blob/main/terraform/staging/variables.tf)). We provide these in different ways depending on the environment:
 
 - In CI (Github Actions), they are provided as environment variables by prefacing the variable name with `TF_VAR_` (Ex. [Github action](https://github.com/18F/federalist-infra/blob/main/.github/workflows/terraform.yml#L22))
@@ -38,18 +39,21 @@ Each environment specifies the credentials it needs in the `variables.tf` file (
 
 See [Terraform variables](https://www.terraform.io/docs/configuration/variables.html) for more details on Terraform variables.
 
-# Environments
-## `global`
+## Environments
+### `global`
 Contains global configuration that may be leveraged by any environment. This currently includes:
 - the backend configuration
 - ECR
 
-## `staging`
+### `staging`
 Contains configuration relevant to the Federalist staging environment.
 
-# Modules
-## `queue`
+## Modules
+### `queue`
 Contains the configuration to create an AWS SQS instance and associated users/policies and a corresponding user-provided service in cloud.gov.
+
+# Contributing
+Before commiting your changes, please sure the configuration and format is valid by running `terraform validate` and `terraform format`. In the future, pre-commit hooks will be added to ensure this happens automatically.
 
 # Public domain
 
