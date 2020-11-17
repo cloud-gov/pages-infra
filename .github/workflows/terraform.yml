@@ -83,7 +83,7 @@ jobs:
                 Show Plan
               </summary>
 
-              <pre><code>${process.env.PLAN}</code></pre>
+              ${process.env.PLAN}
             </details>
           `;
 
