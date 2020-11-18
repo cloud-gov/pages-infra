@@ -77,7 +77,7 @@ Components:
 - Build queue and credentials (AWS SQS, CF UPS)
 - Monitoring and alerting (AWS Cloudwatch, AWS SNS)
 
-When creating this enviroment, the SNS subscription to send emails to `federalist-alerts@gsa.gov` must be created manually in the console as it is currently not supported by Terraform.
+Note: When creating this enviroment, the SNS subscription to send emails to `federalist-alerts@gsa.gov` must be created manually in the console as it is currently not supported by Terraform.
 
 ## Modules
 ### `queue`
