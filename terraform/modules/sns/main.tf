@@ -13,8 +13,9 @@ terraform {
 data "aws_caller_identity" "default" {}
 
 resource "aws_sns_topic" "topic" {
-  name = "${var.name_prefix}-alerts"
-  
+  name              = "${var.name_prefix}-sns-alerts"
+  kms_master_key_id = "alias/aws/sns"
+
   tags = var.tags
 }
 

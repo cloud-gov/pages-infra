@@ -11,6 +11,7 @@ terraform {
 }
 
 resource "aws_sqs_queue" "queue" {
+  name              = "${var.name_prefix}-sqs"
   kms_master_key_id = "alias/aws/sqs"
 
   tags = var.tags
@@ -39,7 +40,7 @@ resource "aws_iam_policy" "queue_policy" {
 }
 
 resource "aws_iam_user" "queue_user" {
-  name = "${var.name_prefix}-sqs"
+  name = "${var.name_prefix}-sqs-user"
 
   tags = var.tags
 }
