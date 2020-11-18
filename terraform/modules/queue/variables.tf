@@ -1,6 +1,6 @@
-variable "aws_user_name" {
+variable "name_prefix" {
   type        = string
-  description = "Unique name used when creating the AWS user with permissions for the created queue"
+  description = "Name used to prefix all service and resource names"
 }
 
 variable "space" {
@@ -8,18 +8,18 @@ variable "space" {
   description = "Id of the Cloud Foundry Space in which the service credentials will be created"
 }
 
-variable "service_name" {
-  type        = string
-  description = "Name of the created Cloud Foundry service which will contain the IAM credentials to access the created queue"
-}
-
 variable "tags" {
   type        = map(string)
-  description = "Tags applied to the created user and queue"
+  description = "Tags applied to services and resources"
   default     = {}
 }
 
 variable "aws_region" {
   type        = string
   description = "AWS region"
+}
+
+variable "sns_topic" {
+  type        = string
+  description = "SNS topic to receive alarms"
 }

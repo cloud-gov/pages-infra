@@ -44,15 +44,30 @@ data "cloudfoundry_space" "space" {
   name     = var.env
 }
 
-module "queue" {
-  source = "../modules/queue"
-
-  aws_user_name = "federalist-${var.env}-sqs"
-  space         = data.cloudfoundry_space.space.id
-  service_name  = "federalist-${var.env}-sqs-creds"
-  aws_region    = data.aws_region.current.name
+locals {
+  prefix = "federalist-${var.env}"
 
   tags = {
     Environment = var.env
   }
+}
+
+module "sns" {
+  source = "../modules/sns"
+
+  name_prefix = "${local.prefix}-alerts"
+
+  tags = local.tags
+}
+
+
+module "queue" {
+  source = "../modules/queue"
+
+  name_prefix = local.prefix
+  space       = data.cloudfoundry_space.space.id
+  aws_region  = data.aws_region.current.name
+  sns_topic   = module.sns.arn
+  
+  tags = local.tags
 }

@@ -14,6 +14,6 @@ output "url" {
 }
 
 output "service_id" {
-  value       = cloudfoundry_user_provided_service.queue-credentials.id
+  value       = cloudfoundry_user_provided_service.queue_credentials.id
   description = "The guid of the created Cloud Foundry service with the IAM credentials for the created queue"
 }
