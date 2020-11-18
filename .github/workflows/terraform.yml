@@ -66,9 +66,10 @@ jobs:
     - name: Terraform Plan Output
       id: planOutput
       run: |
-        mkdir -p ${{ github.workspace }}/tmp/${{ matrix.env }}
-        terraform plan -input=false -no-color -out=${{ github.workspace }}/tmp/${{ matrix.env }}/plan.bin
-        terraform show -json plan.bin > ${{ github.workspace }}/tmp/${{ matrix.env }}/plan.json
+        PLAN_DIR=${{ github.workspace }}/tmp/${{ matrix.env }}
+        mkdir -p $PLAN_DIR
+        terraform plan -input=false -no-color -out=$PLAN_DIR/plan.bin
+        terraform show -json $PLAN_DIR/plan.bin > $PLAN_DIR/plan.json
 
     - name: Test read plan
       uses: actions/github-script@0.9.0
