@@ -66,6 +66,7 @@ jobs:
     - name: Terraform Plan Output
       id: planOutput
       run: |
+        mkdir ${{ github.workspace }}/tmp/${{ matrix.env }}
         terraform plan -input=false -no-color -out=${{ github.workspace }}/tmp/${{ matrix.env }}/plan.bin
         terraform show -json plan.bin > ${{ github.workspace }}/tmp/${{ matrix.env }}/plan.json
 
