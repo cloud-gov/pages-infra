@@ -68,6 +68,6 @@ module "queue" {
   space       = data.cloudfoundry_space.space.id
   aws_region  = data.aws_region.current.name
   sns_topic   = module.sns.arn
-  
+
   tags = local.tags
 }
