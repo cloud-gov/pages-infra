@@ -81,7 +81,7 @@ Note: When creating this enviroment, the SNS subscription to send emails to `fed
 
 ## Modules
 ### `queue`
-Contains the configuration to create an AWS SQS instance and associated users/policies and a corresponding user-provided service in cloud.gov.
+Contains the configuration to create an AWS SQS instance with associated users/policies and a corresponding user-provided service in cloud.gov.
 
 ### `sns`
 Contains the configuration to create an AWS SNS instance and associated users/policies.
