@@ -69,13 +69,13 @@ jobs:
         PLAN_DIR=${{ github.workspace }}/tmp/${{ matrix.env }}
         mkdir -p $PLAN_DIR
         terraform plan -input=false -no-color -out=$PLAN_DIR/plan.bin
-        terraform show -json $PLAN_DIR/plan.bin > $PLAN_DIR/plan.json
+        echo "::set-output name=plan::$(terraform show -json $PLAN_DIR/plan.bin)"
 
     - name: Test read plan
       uses: actions/github-script@0.9.0
       with:
         script: |
-          const plan = require('${{ github.workspace }}/tmp/${{ matrix.env }}/plan.json');
+          const plan = ${{ steps.planOutput.outputs.plan }};
           const changes = plan['resource_changes']
             .filter(rc => !['read', 'no-op'].includes(rc.change.actions[0]))
             .map(rc => `${rc.name}: ${rc.change.actions}`);
