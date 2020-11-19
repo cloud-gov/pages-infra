@@ -63,24 +63,6 @@ jobs:
       id: plan
       run: terraform plan -input=false -no-color
 
-    - name: Terraform Plan Output
-      id: planOutput
-      run: |
-        PLAN_DIR=${{ github.workspace }}/tmp/${{ matrix.env }}
-        mkdir -p $PLAN_DIR
-        terraform plan -input=false -no-color -out=$PLAN_DIR/plan.bin
-        echo "::set-output name=plan::$(terraform show -json $PLAN_DIR/plan.bin)"
-
-    - name: Test read plan
-      uses: actions/github-script@0.9.0
-      with:
-        script: |
-          const plan = ${{ steps.planOutput.outputs.plan }};
-          const changes = plan['resource_changes']
-            .filter(rc => !['read', 'no-op'].includes(rc.change.actions[0]))
-            .map(rc => `${rc.name}: ${rc.change.actions}`);
-          console.log({ changes });
-
     - name: Create Plan Comment
       uses: actions/github-script@0.9.0
       if: github.event_name == 'pull_request'
