@@ -84,7 +84,7 @@ Note: When creating this enviroment, the SNS subscription to send emails to `fed
 Contains the configuration to create an AWS SQS instance with associated users/policies and a corresponding user-provided service in cloud.gov.
 
 ### `sns`
-Contains the configuration to create an AWS SNS instance and associated users/policies.
+Contains the configuration to create an AWS SNS instance with associated users/policies.
 
 # Contributing
 Before commiting your changes, please be sure the configuration and format is valid by running `terraform validate` and `terraform format`. In the future, pre-commit hooks will be added to ensure this happens automatically.
