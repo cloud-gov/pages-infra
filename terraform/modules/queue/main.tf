@@ -19,7 +19,7 @@ resource "aws_sqs_queue" "queue" {
 
 data "aws_iam_policy_document" "queue_policy_document" {
   statement {
-    sid = "Allow reading and writing messages"
+    sid = "AllowReadingAndWritingMessages"
 
     actions = [
       "sqs:DeleteMessage",
@@ -92,7 +92,7 @@ data "aws_iam_policy_document" "queue_alarm_sns_topic_policy_document" {
   policy_id = "__default_policy_ID"
 
   statement {
-    sid = "Allow CloudwatchEvents"
+    sid = "AllowCloudwatchEvents"
 
     actions = ["SNS:Publish"]
 
