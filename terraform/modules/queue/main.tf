@@ -74,6 +74,7 @@ resource "aws_cloudwatch_metric_alarm" "queue_alarm" {
   period              = "900"
   statistic           = "Average"
   threshold           = "60"
+  treat_missing_data  = "ignore"
 
   alarm_description = "This metric monitors sqs message delays"
   alarm_actions     = [var.sns_topic]
