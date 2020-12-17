@@ -16,11 +16,16 @@ jobs:
         working-directory: terraform/${{ matrix.env }}
     
     env:
-      TF_VAR_cf_user:        ${{ secrets[matrix.cf_user] }}
-      TF_VAR_cf_password:    ${{ secrets[matrix.cf_password] }}
-      AWS_ACCESS_KEY_ID:     ${{ secrets.BACKEND_AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.BACKEND_AWS_SECRET_ACCESS_KEY }}
-      AWS_DEFAULT_REGION:    ${{ secrets.BACKEND_AWS_DEFAULT_REGION }}
+      TF_VAR_cf_user:                   ${{ secrets[matrix.cf_user] }}
+      TF_VAR_cf_password:               ${{ secrets[matrix.cf_password] }}
+      AWS_ACCESS_KEY_ID:                ${{ secrets.BACKEND_AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY:            ${{ secrets.BACKEND_AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION:               ${{ secrets.BACKEND_AWS_DEFAULT_REGION }}
+      TF_VAR_aws_access_key_commercial: ${{ secrets.TF_VAR_AWS_ACCESS_KEY_COMMERCIAL }}
+      TF_VAR_aws_secret_key_commercial: ${{ secrets.TF_VAR_AWS_SECRET_KEY_COMMERCIAL }}
+      TF_VAR_aws_access_key_govcloud:   ${{ secrets.TF_VAR_AWS_ACCESS_KEY_GOVCLOUD }}
+      TF_VAR_aws_secret_key_govcloud:   ${{ secrets.TF_VAR_AWS_SECRET_KEY_GOVCLOUD }}
+      TF_VAR_circleci_api_key:          ${{ secrets.TF_VAR_CIRCLECI_API_KEY }}
 
     strategy:
       matrix:
