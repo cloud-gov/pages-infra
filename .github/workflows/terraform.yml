@@ -88,7 +88,10 @@ jobs:
           const output = `
             ## *${{ matrix.name }}* Terraform Detail
             <details><summary>Show Plan</summary>
-            <pre><code>${{ steps.plan.outputs.stdout }}</code></pre>
+
+            \`\`\`
+            ${{ steps.plan.outputs.stdout }}
+            \`\`\`
             </details>
           `;
 
