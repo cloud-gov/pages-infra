@@ -66,33 +66,17 @@ jobs:
           const displayOutcome = outcome => outcome === 'success' ? '✅': '❌';
 
           const output = `
-            ## *${{ matrix.name }}* Terraform Summary
+            ## *${{ matrix.name }}* Terraform
             #### Format: ${displayOutcome('${{ steps.format.outcome }}')}
             #### Init:   ${displayOutcome('${{ steps.init.outcome }}')}
             #### Plan:   ${displayOutcome('${{ steps.plan.outcome }}')}
-          `;
 
-          github.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: output
-          });
-
-    - name: Create Plan Detail Comment
-      uses: actions/github-script@0.9.0
-      if: github.event_name == 'pull_request'
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          const output = `
-            ## *${{ matrix.name }}* Terraform Detail
             <details><summary>Show Plan</summary>
 
-            \`\`\`
+            \`\`\`diff
             ${{ steps.plan.outputs.stdout }}
             \`\`\`
-            </details>
+            </details>            
           `;
 
           github.issues.createComment({
