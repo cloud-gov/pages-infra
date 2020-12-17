@@ -22,7 +22,7 @@ terraform {
     # The values here MUST be hardcoded
     # AWS credentials MUST be provided by environment variables or credentials file
     bucket         = "federalist-terraform"
-    key            = "staging/terraform.tfstate"
+    key            = "production/terraform.tfstate"
     region         = "us-gov-west-1"
     dynamodb_table = "federalist-terraform-locks"
     encrypt        = true
@@ -70,5 +70,5 @@ module "shared" {
     aws.govcloud = aws.govcloud
   }
 
-  cf_env = "staging"
+  cf_env = "production"
 }

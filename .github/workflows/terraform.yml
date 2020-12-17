@@ -16,29 +16,19 @@ jobs:
         working-directory: terraform/${{ matrix.env }}
     
     env:
-      AWS_ACCESS_KEY_ID:     ${{ secrets.BACKEND_AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.BACKEND_AWS_SECRET_ACCESS_KEY }}
-      AWS_DEFAULT_REGION:    ${{ secrets.BACKEND_AWS_DEFAULT_REGION }}
-      TF_VAR_access_key:     ${{ secrets[matrix.access_key] }}
-      TF_VAR_secret_key:     ${{ secrets[matrix.secret_key] }}
-      TF_VAR_region:         ${{ secrets[matrix.region] }}
-      TF_VAR_cf_user:        ${{ secrets[matrix.cf_user] }}
-      TF_VAR_cf_password:    ${{ secrets[matrix.cf_password] }}
+      TF_VAR_cf_user:     ${{ secrets[matrix.cf_user] }}
+      TF_VAR_cf_password: ${{ secrets[matrix.cf_password] }}
 
     strategy:
       matrix:
-        env: [global, staging]
+        env: [staging]
         include:
-          - env: global
-            name: Global
-            access_key: AWS_ACCESS_KEY_ID
-            secret_key: AWS_SECRET_ACCESS_KEY
-            region: AWS_DEFAULT_REGION
+          - env: production
+            name: Production
+            cf_user: CF_USER_PRODUCTION
+            cf_password: CF_PASSWORD_PRODUCTION
           - env: staging
             name: Staging
-            access_key: AWS_ACCESS_KEY_ID_STAGING
-            secret_key: AWS_SECRET_ACCESS_KEY_STAGING
-            region: AWS_DEFAULT_REGION_STAGING
             cf_user: CF_USER_STAGING
             cf_password: CF_PASSWORD_STAGING
 
@@ -51,9 +41,16 @@ jobs:
       with:
         terraform_version: 0.13.2
 
+    - name: Create Backend Config File
+      id: create-config
+      run: |
+        echo "access_key = "\""$BACKEND_AWS_ACCESS_KEY_ID"\""" >> ./backend-config.tfvars
+        echo "secret_key = "\""$BACKEND_AWS_SECRET_ACCESS_KEY"\""" >> ./backend-config.tfvars
+        echo "region = "\""$BACKEND_AWS_DEFAULT_REGION"\""" >> ./backend-config.tfvars
+
     - name: Terraform Init
       id: init
-      run: terraform init -input=false
+      run: terraform init -input=false -backend-config=./backend-config.tfvars
 
     - name: Terraform Format
       id: format

@@ -1,8 +1,12 @@
 terraform {
   required_version = "~> 0.13.2"
 
-  # community providers must be specified in every module... 
   required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "3.5.0"
+    }
+
     cloudfoundry = {
       source  = "cloudfoundry-community/cloudfoundry"
       version = "0.12.6"
@@ -58,10 +62,10 @@ resource "cloudfoundry_user_provided_service" "queue_credentials" {
   name  = "${var.name_prefix}-sqs-creds"
   space = var.space
   credentials = {
-     access_key = aws_iam_access_key.queue_user_access_key.id
-     region     = var.aws_region
-     secret_key = aws_iam_access_key.queue_user_access_key.secret
-     sqs_url    = aws_sqs_queue.queue.id
+    access_key = aws_iam_access_key.queue_user_access_key.id
+    region     = var.aws_region
+    secret_key = aws_iam_access_key.queue_user_access_key.secret
+    sqs_url    = aws_sqs_queue.queue.id
   }
 }
 
