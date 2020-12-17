@@ -57,7 +57,7 @@ jobs:
       id: plan
       run: terraform plan -input=false -no-color
 
-    - name: Create Plan Summary Comment
+    - name: Create Plan Comment
       uses: actions/github-script@0.9.0
       if: github.event_name == 'pull_request'
       with:
