@@ -23,10 +23,6 @@ jobs:
       matrix:
         env: [staging]
         include:
-          - env: production
-            name: Production
-            cf_user: CF_USER_PRODUCTION
-            cf_password: CF_PASSWORD_PRODUCTION
           - env: staging
             name: Staging
             cf_user: CF_USER_STAGING
@@ -44,13 +40,13 @@ jobs:
     - name: Create Backend Config File
       id: create-config
       run: |
-        echo "access_key = "\""$BACKEND_AWS_ACCESS_KEY_ID"\""" >> ./backend-config.tfvars
-        echo "secret_key = "\""$BACKEND_AWS_SECRET_ACCESS_KEY"\""" >> ./backend-config.tfvars
-        echo "region = "\""$BACKEND_AWS_DEFAULT_REGION"\""" >> ./backend-config.tfvars
+        echo "AWS_ACCESS_KEY_ID="\""$BACKEND_AWS_ACCESS_KEY_ID"\""" >> $GITHUB_ENV
+        echo "AWS_SECRET_ACCESS_KEY="\""$BACKEND_AWS_SECRET_ACCESS_KEY"\""" >>  $GITHUB_ENV
+        echo "AWS_DEFAULT_REGION="\""$BACKEND_AWS_DEFAULT_REGION"\""" >>  $GITHUB_ENV
 
     - name: Terraform Init
       id: init
-      run: terraform init -input=false -backend-config=./backend-config.tfvars
+      run: terraform init -input=false
 
     - name: Terraform Format
       id: format
