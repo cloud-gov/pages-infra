@@ -37,16 +37,13 @@ jobs:
       with:
         terraform_version: 0.13.2
 
-    - name: Create Backend Config File
-      id: create-config
-      run: |
-        echo "AWS_ACCESS_KEY_ID="\""$BACKEND_AWS_ACCESS_KEY_ID"\""" >> $GITHUB_ENV
-        echo "AWS_SECRET_ACCESS_KEY="\""$BACKEND_AWS_SECRET_ACCESS_KEY"\""" >>  $GITHUB_ENV
-        echo "AWS_DEFAULT_REGION="\""$BACKEND_AWS_DEFAULT_REGION"\""" >>  $GITHUB_ENV
-
     - name: Terraform Init
       id: init
       run: terraform init -input=false
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.BACKEND_AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.BACKEND_AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ secrets.BACKEND_AWS_DEFAULT_REGION }}
 
     - name: Terraform Format
       id: format
