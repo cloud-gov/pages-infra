@@ -16,8 +16,11 @@ jobs:
         working-directory: terraform/${{ matrix.env }}
     
     env:
-      TF_VAR_cf_user:     ${{ secrets[matrix.cf_user] }}
-      TF_VAR_cf_password: ${{ secrets[matrix.cf_password] }}
+      TF_VAR_cf_user:        ${{ secrets[matrix.cf_user] }}
+      TF_VAR_cf_password:    ${{ secrets[matrix.cf_password] }}
+      AWS_ACCESS_KEY_ID:     ${{ secrets.BACKEND_AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.BACKEND_AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION:    ${{ secrets.BACKEND_AWS_DEFAULT_REGION }}
 
     strategy:
       matrix:
@@ -40,10 +43,6 @@ jobs:
     - name: Terraform Init
       id: init
       run: terraform init -input=false
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.BACKEND_AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.BACKEND_AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: ${{ secrets.BACKEND_AWS_DEFAULT_REGION }}
 
     - name: Terraform Format
       id: format
