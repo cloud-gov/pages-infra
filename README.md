@@ -177,7 +177,7 @@ Working locally on your GSA machine:
 - `terraform init -backend-config=../.backend-config.tfvars -backend-config="key=bootstrap-staging-<platform>/terraform.tfstate"`
 - `terraform plan -var="aws_platform=<platform>"`
 - verify the plan is correct
-- `terraform apply`
+- `terraform apply -var="aws_platform=<platform>"`
 - make note of the outputted value for `assume_role_arn` (you will need this for 2 subsequent steps)
 - In the AWS Console for the AWS Admin account responsible for the target platform, add the outputted role arn to allowed resources in the trust policy for the `terraform-user`.
 - Create a new *root* module for the environment by copy/pasting an existing one, making sure to update all variables as appropriate including `aws_assume_role_arn_<platform>` outputted above
