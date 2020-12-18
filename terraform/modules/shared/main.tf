@@ -90,7 +90,8 @@ locals {
     AWS_ECR_READ_SECRET  = module.ecr.read_secret
     AWS_ECR_WRITE_KEY    = module.ecr.write_key
     AWS_ECR_WRITE_SECRET = module.ecr.write_secret
-    AWS_ECR_URL          = module.ecr.url
+    AWS_ECR_ACCOUNT_URL  = module.ecr.account_url
+    AWS_ECR_REPO         = module.ecr.repo
     AWS_ECR_REGION       = data.aws_region.current_govcloud.name
   }
 }

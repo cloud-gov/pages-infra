@@ -9,8 +9,12 @@ terraform {
   }
 }
 
+locals {
+  repo_name = "${var.name_prefix}-ecr"
+}
+
 resource "aws_ecr_repository" "federalist_ecr" {
-  name = "${var.name_prefix}-ecr"
+  name = local.repo_name
 
   tags = var.tags
 }

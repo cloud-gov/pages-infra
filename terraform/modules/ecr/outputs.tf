@@ -18,7 +18,12 @@ output "write_secret" {
   description = "The aws secret key for the IAM user with write-only access to the ECR instance"
 }
 
-output "url" {
-  value       = aws_ecr_repository.federalist_ecr.repository_url
-  description = "The url of the ECR instance"
+output "account_url" {
+  value       = replace(aws_ecr_repository.federalist_ecr.repository_url, "/${local.repo_name}", "")
+  description = "The url of the ECR account"
+}
+
+output "repo" {
+  value       = local.repo_name
+  description = "The repository name of the ECR instance"
 }
