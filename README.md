@@ -22,8 +22,8 @@ To contain the blast radius of any changes, all credentials used or created by T
 Groups of related configuration are organized into *root* and *shared* [Terraform modules](https://www.terraform.io/docs/configuration/blocks/modules/index.html), which are pretty much exactly like they sound. *Root* modules correspond to environments or other groups of configuration and are isolated from each other with distinct [Terraform state](https://www.terraform.io/docs/state/index.html) files while *shared* modules provide a way to re-use common configuration. When Terraform is run, it is always for a single *root* module.
 
 ### Root modules
-- `backend`: Configures the [Terraform backend](https://www.terraform.io/docs/backends/index.html) ([Terraform S3 backend](https://www.terraform.io/docs/backends/types/s3.html)). Only run once, locally with MFA-protected admin credentials, when bootstrapping the entire repository. See ().
-- `bootstrap-env`: Bootstraps a new environment/AWS account. Only run once, locally with MFA-protected admin credentials, when adding a new environment/AWS account. See ().
+- `backend`: Configures the [Terraform backend](https://www.terraform.io/docs/backends/index.html) ([Terraform S3 backend](https://www.terraform.io/docs/backends/types/s3.html)). Only run once, locally with MFA-protected admin credentials, when bootstrapping the entire repository. See ([Bootstrapping the backend](#bootstrapping-the-backend)).
+- `bootstrap-env`: Bootstraps a new environment/AWS account. Only run once, locally with MFA-protected admin credentials, when adding a new environment/AWS account. See ([Bootstrapping environments](#bootstrapping-environments)).
 - `staging`: Configures the staging environment
 - `production`: Configures the staging environment
 ### Shared modules
