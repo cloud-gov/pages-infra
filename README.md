@@ -103,7 +103,7 @@ These credentials correspond to the `terraform-user` user configured in the spec
 - `TF_VAR_aws_secret_key_commercial`
 
 #### Cloud Foundry
-These correspond to the space deployer credentials in each environment: (`federalist-staging-deployer-circle`, `federalist-production-deployer-circle`)
+These correspond to the space deployer credentials in each environment (`federalist-staging-deployer-circle`, `federalist-production-deployer-circle`):
 - `CF_USER_STAGING`
 - `CF_PASSWORD_STAGING`
 - `CF_USER_PRODUCTION`
