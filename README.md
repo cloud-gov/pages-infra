@@ -64,24 +64,24 @@ To achieve this we:
 - configure a `terraform-user-role` in each environment account, with permissions to manage Terraform resources within the account and in each Admin account we configure a `terraform-user` with permissions to assume the specific role in each environment account for the same *platform* (Commercial/GovCloud) (see [Bootstrapping environments](#bootstrapping-environments)).
 
 # Getting started
-- clone the repository: `git clone git@github.com:18F/federalist-infra.git`
-- enter the repository directory: `cd federalist-infra`
-- create the shared backend configuration by creating a copy of `./terraform/.backend-config.tfvars.example` named `./terraform/.backend-config.tfvars` and populating the credentials for the `terraform-backend` user in AWS Admin GovCloud
-- for each desired environment (`staging` or `production`):
-  - enter the environment directory: `cd terraform/<environment>`
-  - create environment-specific credentials by creating a copy of the desired environment's `.secrets.auto.tfvars.example` file named `.secrets.auto.tfvars` and populate with appropriate values
-  - initialize terraform: `terraform init -backend-config=../.backend-config.tfvars`
+1. clone the repository: `git clone git@github.com:18F/federalist-infra.git`
+2. enter the repository directory: `cd federalist-infra`
+3. create the shared backend configuration by creating a copy of `./terraform/.backend-config.tfvars.example` named `./terraform/.backend-config.tfvars` and populating the credentials for the `terraform-backend` user in AWS Admin GovCloud
+4. for each desired environment (`staging` or `production`):
+    1. enter the environment directory: `cd terraform/<environment>`
+    2. create environment-specific credentials by creating a copy of the desired environment's `.secrets.auto.tfvars.example` file named `.secrets.auto.tfvars` and populate with appropriate values
+    3. initialize terraform: `terraform init -backend-config=../.backend-config.tfvars`
 
 Within each environment, you should be able run `terraform plan` to see the potential effects of any changes.
 
 # Development
 Modifying Terraform configuration can be tricky business because we can't fully test the changes before actually applying them and we want any changes to happen as part of the CI/CD pipeline. To mitigate the risks as much as we can, we will do the following for every change:
-- Validate with `terraform validate` (enforced by CI)
-- Format with `terraform format` (enforced by CI)
-- Run `terraform plan` locally to inspect the potential changes (also run in CI)
-- Thoroughly review pull requests
-- (TODO) Lint with [TFLint](https://github.com/terraform-linters/tflint)
-- (TODO) Security Scan with [TFSEC](https://github.com/tfsec/tfsec)
+1. Validate with `terraform validate` (enforced by CI)
+2. Format with `terraform format` (enforced by CI)
+3. Run `terraform plan` locally to inspect the potential changes (also run in CI)
+4. Thoroughly review pull requests
+5. (TODO) Lint with [TFLint](https://github.com/terraform-linters/tflint)
+6. (TODO) Security Scan with [TFSEC](https://github.com/tfsec/tfsec)
 
 # CI/CD
 Changes in the Terraform configuration are applied using [Github Actions](https://docs.github.com/en/free-pro-team@latest/actions) according to the [`terraform` workflow](https://github.com/18F/federalist-infra/blob/main/.github/workflows/terraform.yml). When a Github pull request is created agains the default branch (`main`), the `terraform` job is run for *each* configured environment (`staging`, `production`) with the results of the corresponding `terraform plan` added as a comment to the pull request. This output should be reviewed in detail before the pull request is approved, `terraform apply` is only run when the pull request is merged to the default branch.
@@ -122,21 +122,21 @@ This only needs to be done once, and only when starting completely from scratch.
 Requirements:
 - Admin credentials for the AWS Admin GovCloud account
 
-Working locally on your GSA machine:
-- `cd terraform/backend`
-- ensure admin credentials are in environment (eg `aws-vault exec <your admin profile> bash`)
-- comment out the `backend` block in `./main.tf`
-- `terraform init`
-- `terraform plan`
-- verify the plan is correct
-- `terraform apply`
-- make note of the backend access key and secret in the outputs
-- create the backend config file as described in [Getting started](#getting-started) with the credentials from the previous step
-- uncomment the `backend` block in `./main.tf`
-- `terraform init -backend-config=../.backend-config.tfvars`
-- `terraform plan`
-- verify no changes need to be made
-- ensure `.backend-config.tfvars` will NOT be checked into version control
+Working locally on your GSA machine, perform the following steps:
+1. `cd terraform/backend`
+2. ensure admin credentials are in environment (eg `aws-vault exec <your admin profile> bash`)
+3. comment out the `backend` block in `./main.tf`
+4. `terraform init`
+5. `terraform plan`
+6. verify the plan is correct
+7. `terraform apply`
+8. make note of the backend access key and secret in the outputs
+9. create the backend config file as described in [Getting started](#getting-started) with the credentials from the previous step
+10. uncomment the `backend` block in `./main.tf`
+11. `terraform init -backend-config=../.backend-config.tfvars`
+12. `terraform plan`
+13. verify no changes need to be made
+14. ensure `.backend-config.tfvars` will NOT be checked into version control
 
 ### Bootstrapping admin accounts
 Each AWS Admin account must contain a dummy user with the ability to assume a role in a target account that will allow it manage Terraform resources. This allows us to only use one set of credentials for each platform (commercial, govcloud) and limit the required permissions.
@@ -145,8 +145,8 @@ Requirements:
 - Console access to AWS Admin Commercial and GovCloud accounts
 
 In the AWS Console for each platform
-- create a user named `terraform-user`
-- add the inline policy:
+1. create a user named `terraform-user`
+2. add the inline policy:
   ```
   {
     "Version": "2012-10-17",
@@ -170,17 +170,17 @@ Requirements:
 - Console access to AWS Admin account for the target platform
 - The backend credentials file as described in [Getting started](#getting-started).
 
-Working locally on your GSA machine:
-- `cd terraform/bootstrap-env`
-- remove existing backend configuration with `rm -rf .terraform` 
-- ensure admin creds are in environment (eg `aws-vault exec <your admin profile> bash`)
-- `terraform init -backend-config=../.backend-config.tfvars -backend-config="key=bootstrap-staging-<platform>/terraform.tfstate"`
-- `terraform plan -var="aws_platform=<platform>"`
-- verify the plan is correct
-- `terraform apply -var="aws_platform=<platform>"`
-- make note of the outputted value for `assume_role_arn` (you will need this for 2 subsequent steps)
-- In the AWS Console for the AWS Admin account responsible for the target platform, add the outputted role arn to allowed resources in the trust policy for the `terraform-user`.
-- Create a new *root* module for the environment by copy/pasting an existing one, making sure to update all variables as appropriate including `aws_assume_role_arn_<platform>` outputted above
+Working locally on your GSA machine, perform the following steps:
+1. `cd terraform/bootstrap-env`
+2. remove existing backend configuration with `rm -rf .terraform` 
+3. ensure admin creds are in environment (eg `aws-vault exec <your admin profile> bash`)
+4. `terraform init -backend-config=../.backend-config.tfvars -backend-config="key=bootstrap-staging-<platform>/terraform.tfstate"`
+5. `terraform plan -var="aws_platform=<platform>"`
+6. verify the plan is correct
+7. `terraform apply -var="aws_platform=<platform>"`
+8. make note of the outputted value for `assume_role_arn` (you will need this for 2 subsequent steps)
+9. In the AWS Console for the AWS Admin account responsible for the target platform, add the outputted role arn to allowed resources in the trust policy for the `terraform-user`.
+10. Create a new *root* module for the environment by copy/pasting an existing one, making sure to update all variables as appropriate including `aws_assume_role_arn_<platform>` outputted above
 
 # Contributing
 Before commiting your changes, please be sure the configuration and format is valid by running `terraform validate` and `terraform format`. In the future, pre-commit hooks will be added to ensure this happens automatically.
