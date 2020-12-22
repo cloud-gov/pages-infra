@@ -84,7 +84,7 @@ Modifying Terraform configuration can be tricky business because we can't fully 
 - (TODO) Security Scan with [TFSEC](https://github.com/tfsec/tfsec)
 
 # CI/CD
-Changes in the Terraform configuration are applied using [Github Actions](https://docs.github.com/en/free-pro-team@latest/actions) according to the [`terraform` workflow](https://github.com/18F/federalist-infra/blob/main/.github/workflows/terraform.yml). When a Github pull request is created agains the default branch (`main`), the `terraform` job is run for *each* configured environment (`staging`, `production`) with the results of the corresponding `terraform plan` added as a comment to the pull request. This output should be reviewed in detail before the pull request is approved, `terraform apply` is only run when the pull request is merged to the default branch.
+Changes in the Terraform configuration are applied using [Github Actions](https://docs.github.com/en/free-pro-team@latest/actions) according to the [`terraform` workflow](https://github.com/18F/federalist-infra/blob/main/.github/workflows/terraform.yml). When a Github pull request is created against the default branch (`main`), the `terraform` job is run for *each* configured environment (`staging`, `production`) with the results of the corresponding `terraform plan` added as a comment to the pull request. This output should be reviewed in detail before the pull request is approved. `terraform apply` is only run when the pull request is merged to the default branch.
 
 Note: Only the `staging` and `production` *root* modules should be run in CI.
 
