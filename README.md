@@ -139,7 +139,7 @@ Working locally on your GSA machine:
 - ensure `.backend-config.tfvars` will NOT be checked into version control
 
 ### Bootstrapping admin accounts
-Each AWS Admin account must contain a dummy user with the ability to assume a role in a target account that will allow it manage Terraform resources. This allows us to only use one set of credentials for each platform (commercial, govcloud) and limit the required permissions.
+Each AWS Admin account must contain a dummy user with the ability to assume a role in a target account that will allow it manage Terraform resources. This allows the use of only one set of credentials for each platform (commercial, govcloud) and limits the required permissions.
 
 Requirements:
 - Console access to AWS Admin Commercial and GovCloud accounts
