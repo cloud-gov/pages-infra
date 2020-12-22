@@ -116,7 +116,7 @@ CircleCI API Key
 # Boostrapping
 To ensure that we can use least-privilege credentials when provisioning resources with Terraform, it is necessary to have some bootstrapping steps that are run once with privileged credentials in a local environment.
 
-### Bootstrapping the backend
+## Bootstrapping the backend
 This only needs to be done once, and only when starting completely from scratch. Since the Terraform configuration includes the resources user for storing the Terraform state, we must create the resources first using local state, then add the backend configuration which makes use of those resources. Terraform is smart enough to recognize when the backend configuration changes.
 
 Requirements:
@@ -138,7 +138,7 @@ Working locally on your GSA machine, perform the following steps:
 13. verify no changes need to be made
 14. ensure `.backend-config.tfvars` will NOT be checked into version control
 
-### Bootstrapping admin accounts
+## Bootstrapping admin accounts
 Each AWS Admin account must contain a dummy user with the ability to assume a role in a target account that will allow it manage Terraform resources. This allows the use of only one set of credentials for each platform (commercial, govcloud) and limits the required permissions.
 
 Requirements:
@@ -162,8 +162,8 @@ In the AWS Console for each platform
   ```
   where each `<role_arn>` corresponds to the assume role arn created when bootstrapping an environment. These can be added now if they are known, or they can be added as created later on. They will look like: `arn:aws-us-gov:iam::<account id>:role/terraform-user-role`.
 
-### Bootstrapping environments
-Before using Terraform to manage resources for a Federalist environment, we need to create a role with appropriate permissions in each AWS account associated with the environment. Since a Federalist environment may need to manage resources in both Commercial and GovCloud accounts AND accounts on different AWS platforms cannot interact, we must run this step for each one. In the steps below, `platform` refers to either `commercial` or `govcloud`. This only needs to be done once when creating an environment completely from scratch. 
+## Bootstrapping environments
+Before using Terraform to manage resources for a Federalist environment, we need to create a role with appropriate permissions in each AWS account associated with the environment. Since a Federalist environment may need to manage resources in both Commercial and GovCloud accounts AND accounts on different AWS platforms cannot interact, we must run this step for each one. In the steps below, `<platform>` can be either `commercial` or `govcloud` and `<env>` can be `staging` or `production`. This only needs to be done once when creating an environment completely from scratch OR when updating the Terraform role permissions. 
  
 Requirements:
 - Admin credentials for the target AWS account
@@ -174,7 +174,7 @@ Working locally on your GSA machine, perform the following steps:
 1. `cd terraform/bootstrap-env`
 2. remove existing backend configuration with `rm -rf .terraform` 
 3. ensure admin creds are in environment (eg `aws-vault exec <your admin profile> bash`)
-4. `terraform init -backend-config=../.backend-config.tfvars -backend-config="key=bootstrap-staging-<platform>/terraform.tfstate"`
+4. `terraform init -backend-config=../.backend-config.tfvars -backend-config="key=bootstrap-<env>-<platform>/terraform.tfstate"`
 5. `terraform plan -var="aws_platform=<platform>"`
 6. verify the plan is correct
 7. `terraform apply -var="aws_platform=<platform>"`

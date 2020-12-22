@@ -163,4 +163,26 @@ data "aws_iam_policy_document" "terraform_user_policy_document" {
     ]
     resources = ["*"]
   }
+
+  #
+  # ECR
+  #
+  statement {
+    actions = [
+      "ecr:PutLifecyclePolicy",
+      "ecr:UntagResource",
+      "ecr:GetLifecyclePolicyPreview",
+      "ecr:CreateRepository",
+      "ecr:SetRepositoryPolicy",
+      "ecr:TagResource",
+      "ecr:ListTagsForResource",
+      "ecr:DeleteRepositoryPolicy",
+      "ecr:DeleteLifecyclePolicy",
+      "ecr:DeleteRepository",
+      "ecr:GetRepositoryPolicy",
+      "ecr:GetLifecyclePolicy",
+      "ecr:DescribeRepositories"
+    ]
+    resources = ["*"]
+  }
 }
