@@ -96,7 +96,7 @@ These credentials correspond to the `terraform-backend` user configured in the A
 - `BACKEND_AWS_DEFAULT_REGION`
 
 #### AWS
-These credentials correspond to the `terraform-user` user configured in the specified platform AWS Admin account.
+These credentials correspond to the `terraform-user` user configured in the specified platform AWS Admin account:
 - `TF_VAR_aws_access_key_govcloud`
 - `TF_VAR_aws_secret_key_govcloud`
 - `TF_VAR_aws_access_key_commercial`
