@@ -3,6 +3,7 @@
 
 # Local secrets
 **/*secrets.auto.tfvars
+**/.backend-config.tfvars
 
 # .tfstate files
 *.tfstate

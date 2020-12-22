@@ -1,8 +1,12 @@
 terraform {
   required_version = "~> 0.13.2"
 
-  # community providers must be specified in every module... 
   required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "3.5.0"
+    }
+
     cloudfoundry = {
       source  = "cloudfoundry-community/cloudfoundry"
       version = "0.12.6"
@@ -51,7 +55,7 @@ data "aws_iam_policy_document" "topic_policy_document" {
       "SNS:AddPermission",
     ]
 
-    effect = "Allow"
+    effect    = "Allow"
     resources = [aws_sns_topic.topic.arn]
 
     principals {

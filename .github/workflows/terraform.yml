@@ -16,29 +16,23 @@ jobs:
         working-directory: terraform/${{ matrix.env }}
     
     env:
-      AWS_ACCESS_KEY_ID:     ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_DEFAULT_REGION:    ${{ secrets.AWS_DEFAULT_REGION }}
-      TF_VAR_access_key:     ${{ secrets[matrix.access_key] }}
-      TF_VAR_secret_key:     ${{ secrets[matrix.secret_key] }}
-      TF_VAR_region:         ${{ secrets[matrix.region] }}
-      TF_VAR_cf_user:        ${{ secrets[matrix.cf_user] }}
-      TF_VAR_cf_password:    ${{ secrets[matrix.cf_password] }}
+      TF_VAR_cf_user:                   ${{ secrets[matrix.cf_user] }}
+      TF_VAR_cf_password:               ${{ secrets[matrix.cf_password] }}
+      AWS_ACCESS_KEY_ID:                ${{ secrets.BACKEND_AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY:            ${{ secrets.BACKEND_AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION:               ${{ secrets.BACKEND_AWS_DEFAULT_REGION }}
+      TF_VAR_aws_access_key_commercial: ${{ secrets.TF_VAR_AWS_ACCESS_KEY_COMMERCIAL }}
+      TF_VAR_aws_secret_key_commercial: ${{ secrets.TF_VAR_AWS_SECRET_KEY_COMMERCIAL }}
+      TF_VAR_aws_access_key_govcloud:   ${{ secrets.TF_VAR_AWS_ACCESS_KEY_GOVCLOUD }}
+      TF_VAR_aws_secret_key_govcloud:   ${{ secrets.TF_VAR_AWS_SECRET_KEY_GOVCLOUD }}
+      TF_VAR_circleci_api_key:          ${{ secrets.TF_VAR_CIRCLECI_API_KEY }}
 
     strategy:
       matrix:
-        env: [global, staging]
+        env: [staging]
         include:
-          - env: global
-            name: Global
-            access_key: AWS_ACCESS_KEY_ID
-            secret_key: AWS_SECRET_ACCESS_KEY
-            region: AWS_DEFAULT_REGION
           - env: staging
             name: Staging
-            access_key: AWS_ACCESS_KEY_ID_STAGING
-            secret_key: AWS_SECRET_ACCESS_KEY_STAGING
-            region: AWS_DEFAULT_REGION_STAGING
             cf_user: CF_USER_STAGING
             cf_password: CF_PASSWORD_STAGING
 
@@ -72,13 +66,17 @@ jobs:
           const displayOutcome = outcome => outcome === 'success' ? '✅': '❌';
 
           const output = `
-            ## Terraforming *${{ matrix.name }}*
+            ## *${{ matrix.name }}* Terraform
             #### Format: ${displayOutcome('${{ steps.format.outcome }}')}
             #### Init:   ${displayOutcome('${{ steps.init.outcome }}')}
             #### Plan:   ${displayOutcome('${{ steps.plan.outcome }}')}
+
             <details><summary>Show Plan</summary>
-            <pre><code>${{ steps.plan.outputs.stdout }}</code></pre>
-            </details>
+
+            \`\`\`diff
+            ${{ steps.plan.outputs.stdout }}
+            \`\`\`
+            </details>            
           `;
 
           github.issues.createComment({
