@@ -25,7 +25,7 @@ Groups of related configuration are organized into *root* and *shared* [Terrafor
 - `backend`: Configures the [Terraform backend](https://www.terraform.io/docs/backends/index.html) ([Terraform S3 backend](https://www.terraform.io/docs/backends/types/s3.html)). Only run once, locally with MFA-protected admin credentials, when bootstrapping the entire repository. See ([Bootstrapping the backend](#bootstrapping-the-backend)).
 - `bootstrap-env`: Bootstraps a new environment/AWS account. Only run once, locally with MFA-protected admin credentials, when adding a new environment/AWS account. See ([Bootstrapping environments](#bootstrapping-environments)).
 - `staging`: Configures the staging environment
-- `production`: Configures the staging environment
+- `production`: Configures the production environment
 ### Shared modules
 - `ecr`: AWS ECR instance for `federalist-garden-build` docker images
 - `queue`: AWS SQS queue and associated AWS CloudWatch alarms
