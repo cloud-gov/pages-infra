@@ -90,7 +90,7 @@ Note: Only the `staging` and `production` *root* modules should be run in CI.
 
 ### Environment Variables
 #### Terraform Backend
-These credentials correspond to the `terraform-backend` user configured in the AWS Admin GovCloud account.
+These credentials correspond to the `terraform-backend` user configured in the AWS Admin GovCloud account:
 - `BACKEND_AWS_ACCESS_KEY_ID`
 - `BACKEND_AWS_SECRET_ACCESS_KEY`
 - `BACKEND_AWS_DEFAULT_REGION`
