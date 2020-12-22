@@ -117,7 +117,7 @@ CircleCI API Key
 To ensure that we can use least-privilege credentials when provisioning resources with Terraform, it is necessary to have some bootstrapping steps that are run once with privileged credentials in a local environment.
 
 ### Bootstrapping the backend
-This only needs to be done once, and only when starting completely from scratch. Since the Terraform configuration includes the resources user for storing the Terraform state, we must create the resources first using local state, then add the backend configuration which makes use of those resources. Terraform is smart enough to recognize when the backend configuration chances
+This only needs to be done once, and only when starting completely from scratch. Since the Terraform configuration includes the resources user for storing the Terraform state, we must create the resources first using local state, then add the backend configuration which makes use of those resources. Terraform is smart enough to recognize when the backend configuration changes.
 
 Requirements:
 - Admin credentials for the AWS Admin GovCloud account
