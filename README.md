@@ -84,26 +84,26 @@ Modifying Terraform configuration can be tricky business because we can't fully 
 6. (TODO) Security Scan with [TFSEC](https://github.com/tfsec/tfsec)
 
 # CI/CD
-Changes in the Terraform configuration are applied using [Github Actions](https://docs.github.com/en/free-pro-team@latest/actions) according to the [`terraform` workflow](https://github.com/18F/federalist-infra/blob/main/.github/workflows/terraform.yml). When a Github pull request is created agains the default branch (`main`), the `terraform` job is run for *each* configured environment (`staging`, `production`) with the results of the corresponding `terraform plan` added as a comment to the pull request. This output should be reviewed in detail before the pull request is approved, `terraform apply` is only run when the pull request is merged to the default branch.
+Changes in the Terraform configuration are applied using [Github Actions](https://docs.github.com/en/free-pro-team@latest/actions) according to the [`terraform` workflow](https://github.com/18F/federalist-infra/blob/main/.github/workflows/terraform.yml). When a Github pull request is created against the default branch (`main`), the `terraform` job is run for *each* configured environment (`staging`, `production`) with the results of the corresponding `terraform plan` added as a comment to the pull request. This output should be reviewed in detail before the pull request is approved. `terraform apply` is only run when the pull request is merged to the default branch.
 
 Note: Only the `staging` and `production` *root* modules should be run in CI.
 
 ### Environment Variables
 #### Terraform Backend
-These credentials correspond to the `terraform-backend` user configured in the AWS Admin GovCloud account.
+These credentials correspond to the `terraform-backend` user configured in the AWS Admin GovCloud account:
 - `BACKEND_AWS_ACCESS_KEY_ID`
 - `BACKEND_AWS_SECRET_ACCESS_KEY`
 - `BACKEND_AWS_DEFAULT_REGION`
 
 #### AWS
-These credentials correspond to the `terraform-user` user configured in the specified platform AWS Admin account.
+These credentials correspond to the `terraform-user` user configured in the specified platform AWS Admin account:
 - `TF_VAR_aws_access_key_govcloud`
 - `TF_VAR_aws_secret_key_govcloud`
 - `TF_VAR_aws_access_key_commercial`
 - `TF_VAR_aws_secret_key_commercial`
 
 #### Cloud Foundry
-These correspond to the space deployer credentials in each environment: (`federalist-staging-deployer-circle`, `federalist-production-deployer-circle`)
+These correspond to the space deployer credentials in each environment (`federalist-staging-deployer-circle`, `federalist-production-deployer-circle`):
 - `CF_USER_STAGING`
 - `CF_PASSWORD_STAGING`
 - `CF_USER_PRODUCTION`
@@ -117,7 +117,7 @@ CircleCI API Key
 To ensure that we can use least-privilege credentials when provisioning resources with Terraform, it is necessary to have some bootstrapping steps that are run once with privileged credentials in a local environment.
 
 ### Bootstrapping the backend
-This only needs to be done once, and only when starting completely from scratch. Since the Terraform configuration includes the resources user for storing the Terraform state, we must create the resources first using local state, then add the backend configuration which makes use of those resources. Terraform is smart enough to recognize when the backend configuration chances
+This only needs to be done once, and only when starting completely from scratch. Since the Terraform configuration includes the resources user for storing the Terraform state, we must create the resources first using local state, then add the backend configuration which makes use of those resources. Terraform is smart enough to recognize when the backend configuration changes.
 
 Requirements:
 - Admin credentials for the AWS Admin GovCloud account
@@ -139,7 +139,7 @@ Working locally on your GSA machine, perform the following steps:
 14. ensure `.backend-config.tfvars` will NOT be checked into version control
 
 ### Bootstrapping admin accounts
-Each AWS Admin account must contain a dummy user with the ability to assume a role in a target account that will allow it manage Terraform resources. This allows us to only use one set of credentials for each platform (commercial, govcloud) and limit the required permissions.
+Each AWS Admin account must contain a dummy user with the ability to assume a role in a target account that will allow it manage Terraform resources. This allows the use of only one set of credentials for each platform (commercial, govcloud) and limits the required permissions.
 
 Requirements:
 - Console access to AWS Admin Commercial and GovCloud accounts
@@ -163,7 +163,7 @@ In the AWS Console for each platform
   where each `<role_arn>` corresponds to the assume role arn created when bootstrapping an environment. These can be added now if they are known, or they can be added as created later on. They will look like: `arn:aws-us-gov:iam::<account id>:role/terraform-user-role`.
 
 ### Bootstrapping environments
-Before using Terraform to manage resources for a Federalist environment, we need to create a role with appropriate permissions in each AWS account associated with the environment. Since a Federalist environment may need to manage resources in both Commercial and GovCloud accounts AND accounts on different AWS platforms cannot interact, we must run this step for each one. In the steps below `platform` refers to either `commercial` or `govcloud`. This only needs to be done once, when creating an environment completely from scratch. 
+Before using Terraform to manage resources for a Federalist environment, we need to create a role with appropriate permissions in each AWS account associated with the environment. Since a Federalist environment may need to manage resources in both Commercial and GovCloud accounts AND accounts on different AWS platforms cannot interact, we must run this step for each one. In the steps below, `platform` refers to either `commercial` or `govcloud`. This only needs to be done once when creating an environment completely from scratch. 
  
 Requirements:
 - Admin credentials for the target AWS account
