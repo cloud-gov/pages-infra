@@ -75,10 +75,15 @@ resource "aws_cloudwatch_metric_alarm" "queue_alarm" {
   evaluation_periods  = "1"
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
-  period              = "900"
+  period              = "300"
   statistic           = "Average"
   threshold           = "60"
   treat_missing_data  = "ignore"
+  datapoints_to_alarm = 1
+
+  dimensions = {
+    QueueName = aws_sqs_queue.queue.name
+  }
 
   alarm_description = "This metric monitors sqs message delays"
   alarm_actions     = [var.sns_topic]
