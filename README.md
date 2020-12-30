@@ -160,7 +160,7 @@ In the AWS Console for each platform
     ]
   }
   ```
-  where each `<role_arn>` corresponds to the assume role arn created when bootstrapping an environment. These can be added now if they are known, or they can be added as created later on. They will look like: `arn:aws-us-gov:iam::<account id>:role/terraform-user-role`.
+  where each `<role_arn>` corresponds to the assume role arn created when bootstrapping an environment. These can be added now if they are known, or they can be added as created later on. Ex. For GovCloud, they will look like: `arn:aws-us-gov:iam::<account id>:role/terraform-user-role`.
 
 ## Bootstrapping environments
 Before using Terraform to manage resources for a Federalist environment, we need to create a role with appropriate permissions in each AWS account associated with the environment. Since a Federalist environment may need to manage resources in both Commercial and GovCloud accounts AND accounts on different AWS platforms cannot interact, we must run this step for each one. In the steps below, `<platform>` can be either `commercial` or `govcloud` and `<env>` can be `staging` or `production`. This only needs to be done once when creating an environment completely from scratch OR when updating the Terraform role permissions. 
