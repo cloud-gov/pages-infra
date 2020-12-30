@@ -104,7 +104,7 @@ data "aws_iam_policy_document" "queue_alarm_sns_topic_policy_document" {
   statement {
     sid = "AllowCloudwatchEvents"
 
-    actions = ["SNS:Publish"]
+    actions = ["sns:Publish"]
 
     effect = "Allow"
 
@@ -112,7 +112,7 @@ data "aws_iam_policy_document" "queue_alarm_sns_topic_policy_document" {
 
     principals {
       type        = "Service"
-      identifiers = ["events.amazonaws.com"]
+      identifiers = ["cloudwatch.amazonaws.com"]
     }
   }
 }
