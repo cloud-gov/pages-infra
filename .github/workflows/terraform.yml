@@ -29,12 +29,17 @@ jobs:
 
     strategy:
       matrix:
-        env: [staging]
+        env: [production, staging]
         include:
           - env: staging
             name: Staging
             cf_user: CF_USER_STAGING
             cf_password: CF_PASSWORD_STAGING
+        include:
+          - env: production
+            name: Production
+            cf_user: CF_USER_PRODUCTION
+            cf_password: CF_PASSWORD_PRODUCTION
 
     steps:
     - name: Checkout
