@@ -10,7 +10,7 @@ variable "org_name" {
 
 variable "env" {
   type        = string
-  description = "cloud.gov environment name (ex: dev, staging, production)"
+  description = "cloud.gov environment name (ex: dev, staging,cf_api_url production)"
 }
 
 # Secrets to be provided via environment variables or in `secrets.auto.tfvars.`
@@ -41,7 +41,7 @@ variable "cf_password" {
   description = "cloud.gov deployer account password"
 }
 
-variable "uev_key" {
-  type        = string
-  description = "User Environment Variables encryption key"
-}
+# variable "uev_key" {
+#   type        = string
+#   description = "User Environment Variables encryption key"
+# }

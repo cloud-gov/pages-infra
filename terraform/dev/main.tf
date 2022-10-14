@@ -14,54 +14,27 @@ data "cloudfoundry_service" "rds" {
 }
 
 data "cloudfoundry_service" "redis" {
-  name = "redis32"
+  name = "aws-elasticache-redis"
 }
 
-data "cloudfoundry_service" "service_account" {
-  name = "cloud-gov-service-account"
+data "cloudfoundry_service" "s3" {
+  name = "s3"
 }
 
 resource "cloudfoundry_service_instance" "database" {
-  name         = "federalist-${var.env}-rds"
+  name         = "pages-${var.env}-rds"
   space        = data.cloudfoundry_space.space.id
-  service_plan = data.cloudfoundry_service.rds.service_plans["medium-psql"]
+  service_plan = data.cloudfoundry_service.rds.service_plans["micro-psql"]
 }
 
 resource "cloudfoundry_service_instance" "redis" {
-  name         = "federalist-${var.env}-redis"
+  name         = "pages-${var.env}-redis"
   space        = data.cloudfoundry_space.space.id
-  service_plan = data.cloudfoundry_service.redis.service_plans["standard-ha"]
+  service_plan = data.cloudfoundry_service.redis.service_plans["redis-dev"]
 }
 
-resource "cloudfoundry_service_instance" "service_account" {
-  name         = "federalist-deploy-user"
+resource "cloudfoundry_service_instance" "s3-build-logs" {
+  name         = "pages-${var.env}-s3-build-logs"
   space        = data.cloudfoundry_space.space.id
-  service_plan = data.cloudfoundry_service.service_account.service_plans["space-deployer"]
-}
-
-resource "cloudfoundry_user_provided_service" "uev_key" {
-  name  = "federalist-${var.env}-uev-key"
-  space = data.cloudfoundry_space.space.id
-  credentials = {
-    key = var.uev_key
-  }
-}
-
-module "queue" {
-  source = "../modules/queue"
-
-  aws_user_name = "federalist-${var.env}-sqs"
-  space         = data.cloudfoundry_space.space.id
-  service_name  = "federalist-${var.env}-sqs-creds"
-  aws_region    = data.aws_region.current.name
-
-  tags = {
-    Environment = var.env
-  }
-}
-
-resource "cloudfoundry_route" "builder" {
-  domain   = data.cloudfoundry_domain.fr.id
-  space    = data.cloudfoundry_space.space.id
-  hostname = "federalist-builder-${var.env}"
+  service_plan = data.cloudfoundry_service.s3.service_plans["basic"]
 }

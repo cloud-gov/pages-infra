@@ -1,10 +1,10 @@
-![Terraform](https://github.com/18F/federalist-infra/workflows/Terraform/badge.svg)
+![Terraform](https://github.com/cloud-gov/pages-infra/workflows/Terraform/badge.svg)
 
-# Federalist Infra
-[Terraform](https://www.terraform.io/) configuration for the Federalist platform.
+# Pages Infra
+[Terraform](https://www.terraform.io/) configuration for the Pages platform.
 
 # Requirements
-- [Terraform 0.13.2](https://www.terraform.io/downloads.html)
+- [Terraform 1.3.1](https://www.terraform.io/downloads.html)
 - Access to AWS, cloud.gov, and CircleCI credentials for each environment
 
 Future goals:
@@ -27,18 +27,18 @@ Groups of related configuration are organized into *root* and *shared* [Terrafor
 - `staging`: Configures the staging environment
 - `production`: Configures the production environment
 ### Shared modules
-- `ecr`: AWS ECR instance for `federalist-garden-build` docker images
+- `ecr`: AWS ECR instance for `pages-garden-build` docker images
 - `queue`: AWS SQS queue and associated AWS CloudWatch alarms
 - `shared`: Common infrastructure configuration for all environments
 - `sns`*: AWS SNS topic used for AWS CloudWatch alarms.
 
-***Note: When first creating SNS resources, the subscription to send emails to `federalist-alerts@gsa.gov` must be created manually in the console as it is currently not supported by Terraform.**
+***Note: When first creating SNS resources, the subscription to send emails to `pages-alerts@gsa.gov` must be created manually in the console as it is currently not supported by Terraform.**
 
 ## AWS Account Setup
 While we want to simplify our configuration as much as possible and minimize the number of credentials, we have to work with the following constraints:
 
-- Each Federalist environment may have resources in both AWS Commercial and AWS GovCloud
-- Each Federalist environment requires isolated AWS accounts
+- Each Pages environment may have resources in both AWS Commercial and AWS GovCloud
+- Each Pages environment requires isolated AWS accounts
 - AWS cross-account permissions do not work between AWS Commercial and AWS GovCloud
 - Best practice is to maintain "admin" accounts seperate from the accounts which contain the resources managed by Terraform
 - Single Terraform backend
@@ -53,7 +53,7 @@ each with a Commercial and GovCloud account and we only need 3 sets of credentia
 - Commercial
 - GovCloud
 
-regardless of the number of environments. 
+regardless of the number of environments.
 
 In the event that we wish to add another non-production environment, we will re-use the Staging environment, making sure to tag resources appropriately.
 
@@ -64,8 +64,8 @@ To achieve this we:
 - configure a `terraform-user-role` in each environment account, with permissions to manage Terraform resources within the account and in each Admin account we configure a `terraform-user` with permissions to assume the specific role in each environment account for the same *platform* (Commercial/GovCloud) (see [Bootstrapping environments](#bootstrapping-environments)).
 
 # Getting started
-1. clone the repository: `git clone git@github.com:18F/federalist-infra.git`
-2. enter the repository directory: `cd federalist-infra`
+1. clone the repository: `git clone git@github.com:cloud-gov/pages-infra.git`
+2. enter the repository directory: `cd pages-infra`
 3. create the shared backend configuration by creating a copy of `./terraform/.backend-config.tfvars.example` named `./terraform/.backend-config.tfvars` and populating the credentials for the `terraform-backend` user in AWS Admin GovCloud
 4. for each desired environment (`staging` or `production`):
     1. enter the environment directory: `cd terraform/<environment>`
@@ -84,7 +84,7 @@ Modifying Terraform configuration can be tricky business because we can't fully 
 6. (TODO) Security Scan with [TFSEC](https://github.com/tfsec/tfsec)
 
 # CI/CD
-Changes in the Terraform configuration are applied using [Github Actions](https://docs.github.com/en/free-pro-team@latest/actions) according to the [`terraform` workflow](https://github.com/18F/federalist-infra/blob/main/.github/workflows/terraform.yml). When a Github pull request is created against the default branch (`main`), the `terraform` job is run for *each* configured environment (`staging`, `production`) with the results of the corresponding `terraform plan` added as a comment to the pull request. This output should be reviewed in detail before the pull request is approved. `terraform apply` is only run when the pull request is merged to the default branch.
+Changes in the Terraform configuration are applied using [Github Actions](https://docs.github.com/en/free-pro-team@latest/actions) according to the [`terraform` workflow](https://github.com/cloud-gov/pages-infra/blob/main/.github/workflows/terraform.yml). When a Github pull request is created against the default branch (`main`), the `terraform` job is run for *each* configured environment (`staging`, `production`) with the results of the corresponding `terraform plan` added as a comment to the pull request. This output should be reviewed in detail before the pull request is approved. `terraform apply` is only run when the pull request is merged to the default branch.
 
 Note: Only the `staging` and `production` *root* modules should be run in CI.
 
@@ -103,7 +103,7 @@ These credentials correspond to the `terraform-user` user configured in the spec
 - `TF_VAR_aws_secret_key_commercial`
 
 #### Cloud Foundry
-These correspond to the space deployer credentials in each environment (`federalist-staging-deployer-circle`, `federalist-production-deployer-circle`):
+These correspond to the space deployer credentials in each environment (`pages-staging-deployer-circle`, `pages-production-deployer-circle`):
 - `CF_USER_STAGING`
 - `CF_PASSWORD_STAGING`
 - `CF_USER_PRODUCTION`
@@ -163,8 +163,8 @@ In the AWS Console for each platform
   where each `<role_arn>` corresponds to the assume role arn created when bootstrapping an environment. These can be added now if they are known, or they can be added as created later on. Ex. For GovCloud, they will look like: `arn:aws-us-gov:iam::<account id>:role/terraform-user-role`.
 
 ## Bootstrapping environments
-Before using Terraform to manage resources for a Federalist environment, we need to create a role with appropriate permissions in each AWS account associated with the environment. Since a Federalist environment may need to manage resources in both Commercial and GovCloud accounts AND accounts on different AWS platforms cannot interact, we must run this step for each one. In the steps below, `<platform>` can be either `commercial` or `govcloud` and `<env>` can be `staging` or `production`. This only needs to be done once when creating an environment completely from scratch OR when updating the Terraform role permissions. 
- 
+Before using Terraform to manage resources for a Pages environment, we need to create a role with appropriate permissions in each AWS account associated with the environment. Since a Pages environment may need to manage resources in both Commercial and GovCloud accounts AND accounts on different AWS platforms cannot interact, we must run this step for each one. In the steps below, `<platform>` can be either `commercial` or `govcloud` and `<env>` can be `staging` or `production`. This only needs to be done once when creating an environment completely from scratch OR when updating the Terraform role permissions.
+
 Requirements:
 - Admin credentials for the target AWS account
 - Console access to AWS Admin account for the target platform
@@ -172,7 +172,7 @@ Requirements:
 
 Working locally on your GSA machine, perform the following steps:
 1. `cd terraform/bootstrap-env`
-2. remove existing backend configuration with `rm -rf .terraform` 
+2. remove existing backend configuration with `rm -rf .terraform`
 3. ensure admin creds are in environment (eg `aws-vault exec <your admin profile> bash`)
 4. `terraform init -backend-config=../.backend-config.tfvars -backend-config="key=bootstrap-<env>-<platform>/terraform.tfstate"`
 5. `terraform plan -var="aws_platform=<platform>"`
