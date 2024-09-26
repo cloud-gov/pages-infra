@@ -1,4 +1,4 @@
-![Terraform](https://github.com/18F/federalist-infra/workflows/Terraform/badge.svg)
+# DEPRECATED - This repository is no longer in use and will not be maintained.
 
 # Federalist Infra
 [Terraform](https://www.terraform.io/) configuration for the Federalist platform.
@@ -53,7 +53,7 @@ each with a Commercial and GovCloud account and we only need 3 sets of credentia
 - Commercial
 - GovCloud
 
-regardless of the number of environments. 
+regardless of the number of environments.
 
 In the event that we wish to add another non-production environment, we will re-use the Staging environment, making sure to tag resources appropriately.
 
@@ -163,8 +163,8 @@ In the AWS Console for each platform
   where each `<role_arn>` corresponds to the assume role arn created when bootstrapping an environment. These can be added now if they are known, or they can be added as created later on. Ex. For GovCloud, they will look like: `arn:aws-us-gov:iam::<account id>:role/terraform-user-role`.
 
 ## Bootstrapping environments
-Before using Terraform to manage resources for a Federalist environment, we need to create a role with appropriate permissions in each AWS account associated with the environment. Since a Federalist environment may need to manage resources in both Commercial and GovCloud accounts AND accounts on different AWS platforms cannot interact, we must run this step for each one. In the steps below, `<platform>` can be either `commercial` or `govcloud` and `<env>` can be `staging` or `production`. This only needs to be done once when creating an environment completely from scratch OR when updating the Terraform role permissions. 
- 
+Before using Terraform to manage resources for a Federalist environment, we need to create a role with appropriate permissions in each AWS account associated with the environment. Since a Federalist environment may need to manage resources in both Commercial and GovCloud accounts AND accounts on different AWS platforms cannot interact, we must run this step for each one. In the steps below, `<platform>` can be either `commercial` or `govcloud` and `<env>` can be `staging` or `production`. This only needs to be done once when creating an environment completely from scratch OR when updating the Terraform role permissions.
+
 Requirements:
 - Admin credentials for the target AWS account
 - Console access to AWS Admin account for the target platform
@@ -172,7 +172,7 @@ Requirements:
 
 Working locally on your GSA machine, perform the following steps:
 1. `cd terraform/bootstrap-env`
-2. remove existing backend configuration with `rm -rf .terraform` 
+2. remove existing backend configuration with `rm -rf .terraform`
 3. ensure admin creds are in environment (eg `aws-vault exec <your admin profile> bash`)
 4. `terraform init -backend-config=../.backend-config.tfvars -backend-config="key=bootstrap-<env>-<platform>/terraform.tfstate"`
 5. `terraform plan -var="aws_platform=<platform>"`
